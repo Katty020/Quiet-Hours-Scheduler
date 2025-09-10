@@ -14,15 +14,14 @@ export async function POST(request: Request) {
     const supabase = await createClient()
     const now = new Date()
 
-    // Find study blocks that start in 10 minutes (with a 1-minute window for flexibility)
-    const tenMinutesFromNow = addMinutes(now, 10)
-    const nineMinutesFromNow = addMinutes(now, 9)
+    const fifteenMinutesFromNow = addMinutes(now, 15)
+    const fiveMinutesFromNow = addMinutes(now, 5)
 
     console.log(
       "[v0] Checking for notifications between:",
-      nineMinutesFromNow.toISOString(),
+      fiveMinutesFromNow.toISOString(),
       "and",
-      tenMinutesFromNow.toISOString(),
+      fifteenMinutesFromNow.toISOString(),
     )
 
     // Get study blocks that need notifications
@@ -36,8 +35,8 @@ export async function POST(request: Request) {
           full_name
         )
       `)
-      .gte("start_time", nineMinutesFromNow.toISOString())
-      .lte("start_time", tenMinutesFromNow.toISOString())
+      .gte("start_time", fiveMinutesFromNow.toISOString())
+      .lte("start_time", fifteenMinutesFromNow.toISOString())
       .eq("notification_sent", false)
 
     if (blocksError) {
